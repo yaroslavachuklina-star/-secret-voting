@@ -18,6 +18,7 @@ input[type=radio]{width:19px;height:19px;min-height:auto;accent-color:#6e2c35}la
 .notice{background:#fff0d3;border:1px solid #d9bd85;border-radius:12px;padding:12px;margin:12px 0}.error{background:#fce7e5;color:#78232c;border-color:#e6adb0}
 code{font-size:14px;background:#f0e4d6;padding:5px;border-radius:6px;overflow-wrap:anywhere}
 .tabs{display:flex;gap:8px;margin:12px 0}.tabs button{flex:1}#toast{position:sticky;top:8px;z-index:2}
+.results{width:100%;border-collapse:collapse;table-layout:fixed}.results th,.results td{text-align:left;padding:10px 5px;border-bottom:1px solid #ecdccc;overflow-wrap:anywhere}.results th:first-child{width:54%}.results th:nth-child(2),.results td:nth-child(2){text-align:center}.results th:last-child,.results td:last-child{text-align:right}.results tr:last-child td{border:0}
 </style></head><body><header><div class="pill">МАФІЯ</div><h1>Голосування</h1><div class="muted">Один голос на раунд · вибір бачить лише ведуча</div></header>
 <div id="toast" role="status"></div><main id="app"><div class="card">Завантаження…</div></main>
 <script>
@@ -34,9 +35,13 @@ async function call(action,params={}){
 }
 async function send(action,params={}){if(busy)return;busy=true;try{const out=await call(action,params);if(action==='history'){historyView(out.history);return}data=out;render()}catch(e){show(e.message,true)}finally{busy=false}}
 function name(id){return data.players.find(p=>p.id===id)?.name||'№'+id}
-function voteView(){const r=data.round,p=data.players.filter(x=>x.active&&x.id!==data.me?.id);
+function resultTable(ballots,playerName){const counts=new Map();for(const b of ballots)counts.set(b.target_id,(counts.get(b.target_id)||0)+1);
+const total=ballots.length;if(!total)return '<p>Голосів поки немає.</p>';
+return '<p class="muted">Усього голосів: '+total+'. Відсотки обчислені від поданих голосів.</p><table class="results"><thead><tr><th>Кандидатка</th><th>Голоси</th><th>Частка</th></tr></thead><tbody>'+[...counts].sort((a,b)=>b[1]-a[1]||String(playerName(a[0])).localeCompare(String(playerName(b[0])),'uk')).map(([id,count])=>'<tr><td>'+esc(playerName(id))+'</td><td>'+count+'</td><td>'+((count/total)*100).toLocaleString('uk-UA',{maximumFractionDigits:1})+'%</td></tr>').join('')+'</tbody></table>'}
+function voteView(){const r=data.round,p=data.players.filter(x=>x.active&&(data.admin||x.id!==data.me?.id));
 let s='<section class="card"><h2>'+esc(r?.title||'Раунд')+'</h2><div class="pill">'+(r?.open?'Відкрито':'Закрито')+'</div>';
-if(!data.me)s+='<p>Щоб голосувати, введи особистий код від ведучої.</p><form id="claim"><input name="code" autocomplete="off" autocapitalize="off" placeholder="Код гравчині" maxlength="16" required> <button>Прив’язати Telegram</button></form>';
+if(data.admin)s+='<p>Перегляд ведучої. Ти бачиш стан голосування, але не береш участі в ньому.</p>'+(r?.open?'<h3>Кандидатки</h3>'+(p.length?p.map(x=>'<div class="row">'+esc(x.name)+'</div>').join(''):'<p>Немає доступних кандидаток.</p>'):'');
+else if(!data.me)s+='<p>Щоб голосувати, введи особистий код від ведучої.</p><form id="claim"><input name="code" autocomplete="off" autocapitalize="off" placeholder="Код гравчині" maxlength="16" required> <button>Прив’язати Telegram</button></form>';
 else if(!data.me.active)s+='<p>Ти вибула з гри. Голосування недоступне.</p>';
 else if(data.voted)s+='<p>Твій голос прийнято. Дякуємо!</p>';
 else if(!r?.open)s+='<p>Ведуча ще не відкрила голосування.</p>';
@@ -47,17 +52,20 @@ function adminView(){const r=data.round,ballots=data.ballots||[],players=data.pl
 let s='<section class="card"><h2>Поточний раунд</h2><p>'+esc(r?.title||'')+' · <b>'+(r?.open?'відкритий':'закритий')+'</b></p><div class="line">';
 if(r?.open)s+='<button data-op="close">Закрити голосування</button>';
 else s+='<button data-op="open">Відкрити голосування</button><button class="secondary" data-op="new_round">Новий раунд</button>';
-s+='</div><p class="muted">Новий раунд починається із чистими голосами. Історія залишається.</p></section>';
+const active=new Set(players.filter(p=>p.active).map(p=>p.id));const votedActive=new Set(ballots.filter(b=>active.has(b.voter_id)).map(b=>b.voter_id)).size;
+s+='</div><p><b>Проголосували: '+votedActive+' із '+active.size+' активних учасниць.</b></p><p class="muted">Новий раунд починається із чистими голосами. Історія залишається.</p></section>';
 s+='<section class="card"><h2>Додати гравчиню</h2><form id="add" class="line"><input name="name" class="grow" maxlength="80" placeholder="Наприклад: №1 Марія" required><button>Додати</button></form><p class="muted">Нових учасниць можна додавати без заданого ліміту.</p></section>';
 s+='<section class="card"><h2>Гравчині · '+players.length+'</h2>';
 for(const p of players){const voted=ballots.some(b=>b.voter_id===p.id);s+='<div class="row"><div class="grow"><b>'+esc(p.name)+'</b> '+(p.active?'':'<span class="pill">Вибула</span>')+'<br><span class="muted">'+(p.linked?'Telegram прив’язаний':'Код: <code>'+esc(p.invite_code)+'</code>')+' · '+(voted?'проголосувала':'ще не голосувала')+'</span></div><div class="line">'+(p.linked?'':'<button class="secondary" data-op="copy" data-code="'+esc(p.invite_code)+'">Копіювати код</button>')+'<button class="secondary" data-op="rename" data-id="'+p.id+'">Ім’я</button><button class="secondary" data-op="active" data-id="'+p.id+'">'+(p.active?'Вибула':'Повернути')+'</button><button class="secondary" data-op="unbind" data-id="'+p.id+'">Новий код</button><button class="danger" data-op="remove" data-id="'+p.id+'">Прибрати</button></div></div>'}
 s+='</section><section class="card"><h2>Голоси ведучої</h2><p class="muted">Учасниці цього списку не бачать.</p>';
 if(!ballots.length)s+='<p>Голосів поки немає.</p>';
 else s+=ballots.map(b=>'<div class="row"><span>'+esc(name(b.voter_id))+'</span><b>→ '+esc(name(b.target_id))+'</b></div>').join('');
-s+='<h3>Підсумок</h3>'+(Object.entries(data.results||{}).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'<div class="row">'+esc(name(Number(k)))+' <b>'+v+'</b></div>').join('')||'Поки порожньо')+'</section>';
+s+='<h3>'+(r?.open?'Поточний підрахунок':'Підсумок раунду')+'</h3>'+resultTable(ballots,name)+'</section>';
 s+='<section class="card"><h2>Історія</h2><div class="line"><select id="roundSelect">'+data.rounds.map(x=>'<option value="'+x.id+'" '+(x.id===r?.id?'selected':'')+'>'+esc(x.title)+'</option>').join('')+'</select><button data-op="history">Переглянути</button></div><div id="history"></div></section>';
 return s}
-function historyView(rows){const box=document.getElementById('history');if(box)box.innerHTML='<h3>Голоси цього раунду</h3>'+(rows.length?rows.map(x=>'<div class="row">'+esc(x.voter)+' → <b>'+esc(x.target)+'</b></div>').join(''):'Голосів немає')}
+function historyView(rows){const box=document.getElementById('history');if(!box)return;
+const summary=rows.map(x=>({target_id:x.target}));
+box.innerHTML='<h3>Підсумок раунду</h3>'+resultTable(summary,id=>id)+'<h3>Голоси цього раунду</h3>'+(rows.length?rows.map(x=>'<div class="row">'+esc(x.voter)+' → <b>'+esc(x.target)+'</b></div>').join(''):'Голосів немає')}
 function render(){app.innerHTML=(data.admin?'<div class="tabs"><button class="'+(tab==='vote'?'':'secondary')+'" data-tab="vote">Голосування</button><button class="'+(tab==='admin'?'':'secondary')+'" data-tab="admin">Адмінка</button></div>':'')+(tab==='admin'&&data.admin?adminView():voteView())}
 app.addEventListener('submit',async e=>{e.preventDefault();if(busy)return;const f=e.target;
 if(f.id==='claim')await send('claim',{code:f.elements.code.value.trim()});
