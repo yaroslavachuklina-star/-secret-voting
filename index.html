@@ -121,13 +121,13 @@ function oldName(label,order){
 function resultTable(ballots,playerName){
   const counts=new Map();
   for(const b of ballots){
-    counts.set(b.target_id,(counts.get(b.target_id)||0)+1);
+    counts.set(b.target_id,(counts.get(b.target_id)||0)+(b.weight||1));
   }
-  const total=ballots.length;
+  const total=ballots.reduce((sum,b)=>sum+(b.weight||1),0);
   if(!total)return '<p>Голосів поки немає.</p>';
 
   return '<p class="muted">Усього голосів: '+total+
-    '. Відсотки обчислені від поданих голосів.</p>'+
+    '. Враховано голоси ×2. Відсотки — від суми голосів.</p>'+
     '<table class="results"><thead><tr>'+
     '<th>Кандидатка</th><th>Голоси</th><th>Частка</th>'+
     '</tr></thead><tbody>'+
@@ -242,7 +242,7 @@ function adminView(){
       '<br><span class="muted">'+
       (p.linked?'Telegram прив’язаний':'Код: <code>'+esc(p.invite_code)+'</code>')+
       (p.in_game
-        ?' · '+(voted?'проголосувала':'ще не голосувала')
+        ?' · голос ×'+(p.vote_weight||1)+' · '+(voted?'проголосувала':'ще не голосувала')
         :' · збережена для наступних ігор')+
       '</span></div><div class="line">'+
       (p.linked?'':'<button class="secondary" data-op="copy" data-code="'+
@@ -250,7 +250,10 @@ function adminView(){
       (r?.finished?'':
         '<button class="secondary" data-op="rename" data-id="'+p.id+'">Ім’я</button>'+
         (p.in_game
-          ?'<button class="secondary" data-op="move" data-direction="-1" data-id="'+
+          ?'<button class="'+(p.vote_weight===2?'':'secondary')+
+            '" data-op="weight" data-id="'+p.id+'">'+
+            (p.vote_weight===2?'Зняти ×2':'Дати ×2')+'</button>'+
+            '<button class="secondary" data-op="move" data-direction="-1" data-id="'+
             p.id+'" '+(r?.open||p.game_order===1?'disabled':'')+'>↑</button>'+
             '<button class="secondary" data-op="move" data-direction="1" data-id="'+
             p.id+'" '+
@@ -290,6 +293,7 @@ function adminView(){
   }else{
     s+=ballots.map(b=>'<div class="row"><span>'+
       esc(oldName(b.voter_name||name(b.voter_id),b.voter_order))+
+      (b.weight===2?' <span class="pill">×2</span>':'')+
       '</span><b>→ '+
       esc(oldName(b.target_name||name(b.target_id),b.target_order))+
       '</b></div>').join('');
@@ -316,12 +320,18 @@ function adminView(){
 function historyView(rows){
   const box=document.getElementById('history');
   if(!box)return;
-  const summary=rows.map(x=>({target_id:x.target}));
+
+  const summary=rows.map(x=>({
+    target_id:x.target,
+    weight:x.weight||1
+  }));
+
   box.innerHTML='<h3>Підсумок раунду</h3>'+
     resultTable(summary,id=>id)+
     '<h3>Голоси цього раунду</h3>'+
     (rows.length
       ?rows.map(x=>'<div class="row">'+esc(x.voter)+
+        (x.weight===2?' <span class="pill">×2</span>':'')+
         ' → <b>'+esc(x.target)+'</b></div>').join('')
       :'Голосів немає');
 }
@@ -389,6 +399,18 @@ app.addEventListener('click',async e=>{
       }
     }
     show('Код скопійовано');
+    return;
+  }
+
+  if(op==='weight'){
+    const p=data.players.find(x=>x.id===id);
+    if(p){
+      send(op,{
+        round:data.round.id,
+        player:id,
+        weight:p.vote_weight===2?1:2
+      });
+    }
     return;
   }
 
