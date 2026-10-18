@@ -5,50 +5,151 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#51212a">
 <title>Голосування · Мафія</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%2351212a%27/%3E%3Cpath d=%27M18 33l10 10 19-23%27 fill=%27none%27 stroke=%27%23c9a46a%27 stroke-width=%277%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2351212a'/%3E%3Cpath d='M18 33l10 10 19-23' fill='none' stroke='%23c9a46a' stroke-width='7'/%3E%3C/svg%3E">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-:root{font-family:system-ui,-apple-system,sans-serif;color:#2e1f1b;background:#f4e7d1;color-scheme:light}
+:root{
+  font-family:system-ui,-apple-system,sans-serif;
+  color:#2e1f1b;
+  background:#f4e7d1;
+  color-scheme:light;
+}
 *{box-sizing:border-box}
-body{margin:0;padding:20px 16px calc(32px + env(safe-area-inset-bottom));max-width:720px;margin-inline:auto}
+body{
+  margin:0;
+  padding:20px 16px calc(32px + env(safe-area-inset-bottom));
+  max-width:720px;
+  margin-inline:auto;
+}
 header{text-align:center;margin:10px 0 24px}
-h1{font-family:Georgia,serif;font-size:30px;color:#6e2c35;margin:0 0 6px}
-h2{font-family:Georgia,serif;color:#6e2c35;margin:0 0 14px;font-size:22px}
+h1{
+  font-family:Georgia,serif;
+  font-size:30px;
+  color:#6e2c35;
+  margin:0 0 6px;
+}
+h2{
+  font-family:Georgia,serif;
+  color:#6e2c35;
+  margin:0 0 14px;
+  font-size:22px;
+}
 h3{margin:16px 0 8px}
 .muted{color:#76615b;font-size:14px}
-.card{background:#fff8ee;border:1px solid #e8d5bd;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 6px 18px #51212a0c}
-.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #ecdccc}
+.card{
+  background:#fff8ee;
+  border:1px solid #e8d5bd;
+  border-radius:18px;
+  padding:18px;
+  margin:14px 0;
+  box-shadow:0 6px 18px #51212a0c;
+}
+.row{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  padding:10px 0;
+  border-bottom:1px solid #ecdccc;
+}
 .row:last-child{border:0}
 .line{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .grow{flex:1;min-width:120px}
-button{border:0;border-radius:12px;padding:11px 14px;background:#51212a;color:white;font-weight:700;cursor:pointer;min-height:42px}
+button{
+  border:0;
+  border-radius:12px;
+  padding:11px 14px;
+  background:#51212a;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  min-height:42px;
+}
 button.secondary{background:#eaddcf;color:#51212a}
 button.danger{background:#8e3940}
 button:disabled{opacity:.45;cursor:default}
-input,select{font:inherit;color:inherit;border:1px solid #d9bea4;background:white;border-radius:10px;padding:11px;min-height:42px;max-width:100%}
-input[type=radio]{width:19px;height:19px;min-height:auto;accent-color:#6e2c35}
-label.choice{display:flex;gap:12px;align-items:center;padding:13px 4px;border-bottom:1px solid #ecdccc}
-.pill{display:inline-block;background:#e8d4b2;color:#51212a;border-radius:99px;padding:5px 10px;font-size:12px;font-weight:700}
-.notice{background:#fff0d3;border:1px solid #d9bd85;border-radius:12px;padding:12px;margin:12px 0}
+input,select{
+  font:inherit;
+  color:inherit;
+  border:1px solid #d9bea4;
+  background:white;
+  border-radius:10px;
+  padding:11px;
+  min-height:42px;
+  max-width:100%;
+}
+input[type=radio]{
+  width:19px;
+  height:19px;
+  min-height:auto;
+  accent-color:#6e2c35;
+}
+label.choice{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:13px 4px;
+  border-bottom:1px solid #ecdccc;
+}
+.pill{
+  display:inline-block;
+  background:#e8d4b2;
+  color:#51212a;
+  border-radius:99px;
+  padding:5px 10px;
+  font-size:12px;
+  font-weight:700;
+}
+.notice{
+  background:#fff0d3;
+  border:1px solid #d9bd85;
+  border-radius:12px;
+  padding:12px;
+  margin:12px 0;
+}
 .error{background:#fce7e5;color:#78232c;border-color:#e6adb0}
-code{font-size:14px;background:#f0e4d6;padding:5px;border-radius:6px;overflow-wrap:anywhere}
+code{
+  font-size:14px;
+  background:#f0e4d6;
+  padding:5px;
+  border-radius:6px;
+  overflow-wrap:anywhere;
+}
 .tabs{display:flex;gap:8px;margin:12px 0}
 .tabs button{flex:1}
 #toast{position:sticky;top:8px;z-index:2}
 .results{width:100%;border-collapse:collapse;table-layout:fixed}
-.results th,.results td{text-align:left;padding:10px 5px;border-bottom:1px solid #ecdccc;overflow-wrap:anywhere}
+.results th,.results td{
+  text-align:left;
+  padding:10px 5px;
+  border-bottom:1px solid #ecdccc;
+  overflow-wrap:anywhere;
+}
 .results th:first-child{width:54%}
 .results th:nth-child(2),.results td:nth-child(2){text-align:center}
 .results th:last-child,.results td:last-child{text-align:right}
 .results tr:last-child td{border:0}
+.status-row{flex-wrap:nowrap}
+.status-name{min-width:0;overflow-wrap:anywhere}
+.voted-check{
+  color:#238640;
+  font-size:24px;
+  font-weight:800;
+  flex:0 0 28px;
+  text-align:center;
+}
 </style>
 </head>
+
 <body>
 <header>
-<div class="pill">МАФІЯ</div>
-<h1>Голосування</h1>
-<div class="muted">Один голос на раунд · вибір бачить лише ведуча</div>
+  <div class="pill">МАФІЯ</div>
+  <h1>Голосування</h1>
+  <div class="muted">Один голос на раунд · вибір бачить лише ведуча</div>
 </header>
+
 <div id="toast" role="status"></div>
 <main id="app"><div class="card">Завантаження…</div></main>
 
@@ -60,26 +161,46 @@ tg?.expand();
 
 const app=document.getElementById('app');
 const toast=document.getElementById('toast');
-let data=null,tab='vote',busy=false;
+
+let data=null;
+let tab='vote';
+let busy=false;
+let refreshBusy=false;
+let revision=0;
+let toastTimer;
 
 function esc(v){
   return String(v??'').replace(/[&<>"']/g,c=>({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
   }[c]));
 }
 
 function show(msg,error=false){
-  toast.innerHTML='<div class="notice '+(error?'error':'')+'">'+esc(msg)+'</div>';
-  setTimeout(()=>{toast.textContent=''},5500);
+  clearTimeout(toastTimer);
+  toast.innerHTML='<div class="notice '+(error?'error':'')+'">'+
+    esc(msg)+'</div>';
+  toastTimer=setTimeout(()=>{toast.textContent=''},5500);
 }
 
 async function call(action,params={}){
-  if(!tg?.initData)throw Error('Відкрий Mini App кнопкою у Telegram-боті');
+  if(!tg?.initData){
+    throw Error('Відкрий Mini App кнопкою у Telegram-боті');
+  }
+
   const r=await fetch(API_URL,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({initData:tg.initData,action,...params})
+    body:JSON.stringify({
+      initData:tg.initData,
+      action,
+      ...params
+    })
   });
+
   const out=await r.json();
   if(!r.ok)throw Error(out.error||'Спробуй ще раз');
   return out;
@@ -87,13 +208,18 @@ async function call(action,params={}){
 
 async function send(action,params={}){
   if(busy)return;
+
   busy=true;
+  revision++;
+
   try{
     const out=await call(action,params);
+
     if(action==='history'){
       historyView(out.history);
       return;
     }
+
     data=out;
     render();
   }catch(e){
@@ -115,15 +241,29 @@ function name(id){
 }
 
 function oldName(label,order){
-  return order?'№'+order+' '+label.replace(/^№\d+\s*/,''):label;
+  return order
+    ?'№'+order+' '+label.replace(/^№\d+\s*/,'')
+    :label;
+}
+
+function eligible(p){
+  return p.in_game&&(p.active||p.ghost_vote);
 }
 
 function resultTable(ballots,playerName){
   const counts=new Map();
+
   for(const b of ballots){
-    counts.set(b.target_id,(counts.get(b.target_id)||0)+(b.weight||1));
+    counts.set(
+      b.target_id,
+      (counts.get(b.target_id)||0)+(b.weight||1)
+    );
   }
-  const total=ballots.reduce((sum,b)=>sum+(b.weight||1),0);
+
+  const total=ballots.reduce(
+    (sum,b)=>sum+(b.weight||1),0
+  );
+
   if(!total)return '<p>Голосів поки немає.</p>';
 
   return '<p class="muted">Усього голосів: '+total+
@@ -133,13 +273,35 @@ function resultTable(ballots,playerName){
     '</tr></thead><tbody>'+
     [...counts]
       .sort((a,b)=>b[1]-a[1]||
-        String(playerName(a[0])).localeCompare(String(playerName(b[0])),'uk'))
-      .map(([id,count])=>'<tr><td>'+esc(playerName(id))+
+        String(playerName(a[0])).localeCompare(
+          String(playerName(b[0])),'uk'
+        ))
+      .map(([id,count])=>
+        '<tr><td>'+esc(playerName(id))+
         '</td><td>'+count+'</td><td>'+
-        ((count/total)*100).toLocaleString('uk-UA',{maximumFractionDigits:1})+
-        '%</td></tr>')
-      .join('')+
+        ((count/total)*100).toLocaleString(
+          'uk-UA',{maximumFractionDigits:1}
+        )+
+        '%</td></tr>'
+      ).join('')+
     '</tbody></table>';
+}
+
+function hostRows(players){
+  const voted=new Set(
+    (data.ballots||[]).map(b=>b.voter_id)
+  );
+
+  return players.slice()
+    .sort((a,b)=>a.game_order-b.game_order)
+    .map(p=>
+      '<div class="row status-row">'+
+      '<span class="status-name">'+esc(person(p))+'</span>'+
+      '<span class="voted-check" aria-label="'+
+      (voted.has(p.id)?'Проголосувала':'Ще не голосувала')+'">'+
+      (voted.has(p.id)?'✓':'')+
+      '</span></div>'
+    ).join('');
 }
 
 function voteView(){
@@ -148,47 +310,77 @@ function voteView(){
     x.active&&x.in_game&&(data.admin||x.id!==data.me?.id)
   );
 
-  let s='<section class="card"><h2>'+esc(r?.title||'Раунд')+
+  let s='<section class="card"><h2>'+
+    esc(r?.title||'Раунд')+
     '</h2><div class="pill">'+
     (r?.finished?'Гру завершено':r?.open?'Відкрито':'Закрито')+
     '</div>';
 
   if(data.admin){
-    s+='<p>Перегляд ведучої. Ти бачиш стан голосування, але не береш участі в ньому.</p>'+
-      (r?.open
-        ?'<h3>Кандидатки</h3>'+
-          (p.length
-            ?p.sort((a,b)=>a.game_order-b.game_order)
-              .map(x=>'<div class="row">'+esc(person(x))+'</div>').join('')
-            :'<p>Немає доступних кандидаток.</p>')
-        :'');
+    s+='<p>Перегляд ведучої. Ти бачиш стан голосування, '+
+      'але не береш участі в ньому.</p>';
+
+    s+='<h3>Кандидатки</h3>'+
+      (p.length
+        ?hostRows(p)
+        :'<p>Немає доступних кандидаток.</p>');
+
+    const ghosts=data.players.filter(x=>
+      x.in_game&&!x.active&&x.ghost_vote
+    );
+
+    if(ghosts.length){
+      s+='<h3>Вибули, але голосують</h3>'+hostRows(ghosts);
+    }
+
+    s+='<p class="muted" id="refresh-status">'+
+      'Галочки оновлюються автоматично.</p>'+
+      '<button class="secondary" data-op="state">Оновити</button>';
+
   }else if(!data.me){
     s+='<p>Щоб голосувати, введи особистий код від ведучої.</p>'+
-      '<form id="claim"><input name="code" autocomplete="off" autocapitalize="off" '+
+      '<form id="claim">'+
+      '<input name="code" autocomplete="off" autocapitalize="off" '+
       'placeholder="Код гравчині" maxlength="16" required> '+
       '<button>Прив’язати Telegram</button></form>';
+
   }else if(!data.me.in_game){
-    s+='<p>Твій Telegram прив’язаний. У цьому складі гри тебе немає; новий код не потрібен.</p>';
-  }else if(!data.me.active){
+    s+='<p>Твій Telegram прив’язаний. У цьому складі гри '+
+      'тебе немає; новий код не потрібен.</p>';
+
+  }else if(!eligible(data.me)){
     s+='<p>Ти вибула з гри. Голосування недоступне.</p>';
+
   }else if(data.voted){
     s+='<p>Твій голос прийнято. Дякуємо!</p>';
-  }else if(!r?.open){
-    s+='<p>'+(r?.finished
-      ?'Гру завершено. Дякуємо за участь!'
-      :'Ведуча ще не відкрила голосування.')+'</p>';
+
+  }else if(!r?.open||r?.finished){
+    s+='<p>'+
+      (r?.finished
+        ?'Гру завершено. Дякуємо за участь!'
+        :'Ведуча ще не відкрила голосування.')+
+      '</p>';
+
   }else if(!p.length){
     s+='<p>Немає доступних кандидаток.</p>';
+
   }else{
+    if(!data.me.active&&data.me.ghost_vote){
+      s+='<div class="notice">Ти вибула з гри, але ведуча '+
+        'залишила тобі право голосу.</div>';
+    }
+
     s+='<p>Ти: <b>'+esc(person(data.me))+
       '</b>. Обери одну гравчиню:</p><form id="vote">'+
       p.sort((a,b)=>a.game_order-b.game_order)
-        .map(x=>'<label class="choice">'+
+        .map(x=>
+          '<label class="choice">'+
           '<input type="radio" name="target" value="'+x.id+'" required>'+
-          '<span>'+esc(person(x))+'</span></label>')
-        .join('')+
+          '<span>'+esc(person(x))+'</span></label>'
+        ).join('')+
       '<p><button>Проголосувати</button></p></form>';
   }
+
   return s+'</section>';
 }
 
@@ -212,24 +404,29 @@ function adminView(){
       '<button class="secondary" data-op="finish_game">Завершити гру</button>';
   }
 
-  const active=new Set(
-    players.filter(p=>p.active&&p.in_game).map(p=>p.id)
+  const voters=new Set(
+    players.filter(eligible).map(p=>p.id)
   );
-  const votedActive=new Set(
-    ballots.filter(b=>active.has(b.voter_id)).map(b=>b.voter_id)
+
+  const voted=new Set(
+    ballots.filter(b=>voters.has(b.voter_id))
+      .map(b=>b.voter_id)
   ).size;
 
-  s+='</div><p><b>Проголосували: '+votedActive+' із '+active.size+
-    ' активних учасниць.</b></p>'+
-    '<p class="muted">Новий раунд зберігає склад гри та вибулих, '+
-    'але починається із чистими голосами. Нова гра створює новий склад '+
-    'після завершення поточної.</p></section>';
+  s+='</div><p><b>Проголосували: '+voted+' із '+voters.size+
+    ' учасниць із правом голосу.</b></p>'+
+    '<p class="muted">Новий раунд зберігає склад гри, вибулих '+
+    'і їхній дозвіл голосувати, але починається із чистими голосами. '+
+    'Нова гра скидає склад і дозволи голосувати після вибування.'+
+    '</p></section>';
 
   s+='<section class="card"><h2>Додати профіль</h2>'+
     (r?.finished
       ?'<p class="muted">Для нового складу спочатку натисни «Нова гра».</p>'
-      :'<form id="add" class="line"><input name="name" class="grow" maxlength="80" '+
-        'placeholder="Наприклад: @maria" required><button>Додати</button></form>'+
+      :'<form id="add" class="line">'+
+        '<input name="name" class="grow" maxlength="80" '+
+        'placeholder="Наприклад: @maria" required>'+
+        '<button>Додати</button></form>'+
         '<p class="muted">Новий профіль з’явиться в збережених. '+
         'Видай код, потім додай її до гри.</p>')+
     '</section>';
@@ -237,35 +434,59 @@ function adminView(){
   function playerRow(p){
     const voted=ballots.some(b=>b.voter_id===p.id);
 
-    return '<div class="row"><div class="grow"><b>'+esc(person(p))+'</b> '+
-      (p.in_game&&!p.active?'<span class="pill">Вибула</span>':'')+
+    return '<div class="row"><div class="grow"><b>'+
+      esc(person(p))+'</b> '+
+      (p.in_game&&!p.active
+        ?'<span class="pill">'+
+          (p.ghost_vote?'Вибула, але голосує':'Вибула')+
+          '</span>'
+        :'')+
       '<br><span class="muted">'+
-      (p.linked?'Telegram прив’язаний':'Код: <code>'+esc(p.invite_code)+'</code>')+
+      (p.linked
+        ?'Telegram прив’язаний'
+        :'Код: <code>'+esc(p.invite_code)+'</code>')+
       (p.in_game
-        ?' · голос ×'+(p.vote_weight||1)+' · '+(voted?'проголосувала':'ще не голосувала')
+        ?' · голос ×'+(p.vote_weight||1)+' · '+
+          (voted
+            ?'проголосувала'
+            :eligible(p)?'ще не голосувала':'без права голосу')
         :' · збережена для наступних ігор')+
       '</span></div><div class="line">'+
-      (p.linked?'':'<button class="secondary" data-op="copy" data-code="'+
-        esc(p.invite_code)+'">Копіювати код</button>')+
-      (r?.finished?'':
-        '<button class="secondary" data-op="rename" data-id="'+p.id+'">Ім’я</button>'+
-        (p.in_game
-          ?'<button class="'+(p.vote_weight===2?'':'secondary')+
-            '" data-op="weight" data-id="'+p.id+'">'+
-            (p.vote_weight===2?'Зняти ×2':'Дати ×2')+'</button>'+
-            '<button class="secondary" data-op="move" data-direction="-1" data-id="'+
-            p.id+'" '+(r?.open||p.game_order===1?'disabled':'')+'>↑</button>'+
-            '<button class="secondary" data-op="move" data-direction="1" data-id="'+
-            p.id+'" '+
-            (r?.open||p.game_order===players.filter(x=>x.in_game).length?'disabled':'')+
-            '>↓</button>'+
-            '<button class="secondary" data-op="active" data-id="'+p.id+'">'+
-            (p.active?'Вибула':'Повернути')+'</button>'
-          :'')+
-        '<button class="secondary" data-op="roster" data-id="'+p.id+'" '+
-        (r?.open?'disabled':'')+'>'+(p.in_game?'Не грає':'До гри')+'</button>'+
-        '<button class="secondary" data-op="unbind" data-id="'+p.id+'">Новий код</button>'+
-        '<button class="danger" data-op="remove" data-id="'+p.id+'">Видалити профіль</button>')+
+      (p.linked
+        ?''
+        :'<button class="secondary" data-op="copy" data-code="'+
+          esc(p.invite_code)+'">Копіювати код</button>')+
+      (r?.finished
+        ?''
+        :'<button class="secondary" data-op="rename" data-id="'+
+          p.id+'">Ім’я</button>'+
+          (p.in_game
+            ?'<button class="'+(p.vote_weight===2?'':'secondary')+
+              '" data-op="weight" data-id="'+p.id+'">'+
+              (p.vote_weight===2?'Зняти ×2':'Дати ×2')+'</button>'+
+              '<button class="secondary" data-op="move" '+
+              'data-direction="-1" data-id="'+p.id+'" '+
+              (r?.open||p.game_order===1?'disabled':'')+'>↑</button>'+
+              '<button class="secondary" data-op="move" '+
+              'data-direction="1" data-id="'+p.id+'" '+
+              (r?.open||
+                p.game_order===players.filter(x=>x.in_game).length
+                ?'disabled':'')+'>↓</button>'+
+              '<button class="secondary" data-op="active" data-id="'+
+              p.id+'">'+(p.active?'Вибула':'Повернути')+'</button>'+
+              '<button class="'+(p.ghost_vote?'':'secondary')+
+              '" data-op="ghost" data-id="'+p.id+'">'+
+              (p.ghost_vote
+                ?'Забрати право голосу'
+                :'Вибула, але голосує')+'</button>'
+            :'')+
+          '<button class="secondary" data-op="roster" data-id="'+
+          p.id+'" '+(r?.open?'disabled':'')+'>'+
+          (p.in_game?'Не грає':'До гри')+'</button>'+
+          '<button class="secondary" data-op="unbind" data-id="'+
+          p.id+'">Новий код</button>'+
+          '<button class="danger" data-op="remove" data-id="'+
+          p.id+'">Видалити профіль</button>')+
       '</div></div>';
   }
 
@@ -291,17 +512,21 @@ function adminView(){
   if(!ballots.length){
     s+='<p>Голосів поки немає.</p>';
   }else{
-    s+=ballots.map(b=>'<div class="row"><span>'+
+    s+=ballots.map(b=>
+      '<div class="row"><span>'+
       esc(oldName(b.voter_name||name(b.voter_id),b.voter_order))+
       (b.weight===2?' <span class="pill">×2</span>':'')+
       '</span><b>→ '+
       esc(oldName(b.target_name||name(b.target_id),b.target_order))+
-      '</b></div>').join('');
+      '</b></div>'
+    ).join('');
   }
 
   const snapshotName=id=>{
     const b=ballots.find(x=>x.target_id===id);
-    return b?oldName(b.target_name||name(id),b.target_order):name(id);
+    return b
+      ?oldName(b.target_name||name(id),b.target_order)
+      :name(id);
   };
 
   s+='<h3>'+(r?.open?'Поточний підрахунок':'Підсумок раунду')+
@@ -309,10 +534,13 @@ function adminView(){
 
   s+='<section class="card"><h2>Історія</h2><div class="line">'+
     '<select id="roundSelect">'+
-    data.rounds.map(x=>'<option value="'+x.id+'" '+
-      (x.id===r?.id?'selected':'')+'>'+esc(x.title)+'</option>').join('')+
-    '</select><button data-op="history">Переглянути</button></div>'+
-    '<div id="history"></div></section>';
+    data.rounds.map(x=>
+      '<option value="'+x.id+'" '+
+      (x.id===r?.id?'selected':'')+'>'+
+      esc(x.title)+'</option>'
+    ).join('')+
+    '</select><button data-op="history">Переглянути</button>'+
+    '</div><div id="history"></div></section>';
 
   return s;
 }
@@ -330,17 +558,20 @@ function historyView(rows){
     resultTable(summary,id=>id)+
     '<h3>Голоси цього раунду</h3>'+
     (rows.length
-      ?rows.map(x=>'<div class="row">'+esc(x.voter)+
+      ?rows.map(x=>
+        '<div class="row">'+esc(x.voter)+
         (x.weight===2?' <span class="pill">×2</span>':'')+
-        ' → <b>'+esc(x.target)+'</b></div>').join('')
+        ' → <b>'+esc(x.target)+'</b></div>'
+      ).join('')
       :'Голосів немає');
 }
 
 function render(){
   app.innerHTML=(data.admin
-    ?'<div class="tabs"><button class="'+(tab==='vote'?'':'secondary')+
-      '" data-tab="vote">Голосування</button><button class="'+
-      (tab==='admin'?'':'secondary')+
+    ?'<div class="tabs"><button class="'+
+      (tab==='vote'?'':'secondary')+
+      '" data-tab="vote">Голосування</button>'+
+      '<button class="'+(tab==='admin'?'':'secondary')+
       '" data-tab="admin">Адмінка</button></div>'
     :'')+
     (tab==='admin'&&data.admin?adminView():voteView());
@@ -349,19 +580,29 @@ function render(){
 app.addEventListener('submit',async e=>{
   e.preventDefault();
   if(busy)return;
+
   const f=e.target;
 
   if(f.id==='claim'){
-    await send('claim',{code:f.elements.code.value.trim()});
+    await send('claim',{
+      code:f.elements.code.value.trim()
+    });
   }
+
   if(f.id==='add'){
-    await send('add',{name:f.elements.name.value.trim()});
+    await send('add',{
+      name:f.elements.name.value.trim()
+    });
   }
+
   if(f.id==='vote'){
     const target=f.elements.target.value;
     if(!target)return;
-    if(confirm('Підтвердити голос за '+name(Number(target))+
-      '? Змінити його потім не можна.')){
+
+    if(confirm(
+      'Підтвердити голос за '+name(Number(target))+
+      '? Змінити його потім не можна.'
+    )){
       await send('vote',{target:Number(target)});
     }
   }
@@ -369,7 +610,7 @@ app.addEventListener('submit',async e=>{
 
 app.addEventListener('click',async e=>{
   const b=e.target.closest('button[data-tab],button[data-op]');
-  if(!b||busy)return;
+  if(!b||b.disabled||busy)return;
 
   if(b.dataset.tab){
     tab=b.dataset.tab;
@@ -382,6 +623,7 @@ app.addEventListener('click',async e=>{
 
   if(op==='copy'){
     const code=b.dataset.code;
+
     try{
       await navigator.clipboard.writeText(code);
     }catch{
@@ -391,21 +633,35 @@ app.addEventListener('click',async e=>{
       field.style.opacity='0';
       document.body.append(field);
       field.select();
+
       const ok=document.execCommand('copy');
       field.remove();
+
       if(!ok){
         prompt('Скопіюй код:',code);
         return;
       }
     }
+
     show('Код скопійовано');
+    return;
+  }
+
+  if(op==='ghost'){
+    const p=data.players.find(x=>x.id===id);
+    if(p){
+      await send('ghost',{
+        player:id,
+        enabled:!p.ghost_vote
+      });
+    }
     return;
   }
 
   if(op==='weight'){
     const p=data.players.find(x=>x.id===id);
     if(p){
-      send(op,{
+      await send(op,{
         round:data.round.id,
         player:id,
         weight:p.vote_weight===2?1:2
@@ -415,57 +671,125 @@ app.addEventListener('click',async e=>{
   }
 
   if(op==='history'){
-    return send('history',{round:document.getElementById('roundSelect').value});
+    return send('history',{
+      round:document.getElementById('roundSelect').value
+    });
   }
 
   if(op==='finish_game'){
-    if(confirm('Завершити всю гру? Після цього можна буде створити нову гру '+
-      'з іншим складом. Результати та прив’язки Telegram збережуться.')){
-      send(op);
+    if(confirm(
+      'Завершити всю гру? Після цього можна буде створити нову гру '+
+      'з іншим складом. Результати та прив’язки Telegram збережуться.'
+    )){
+      await send(op);
     }
     return;
   }
 
   if(op==='new_game'){
-    const title=prompt('Назва нової гри та першого раунду:','Нова гра · Раунд 1');
-    if(title&&confirm('Створити нову гру? Поточний склад очиститься, '+
-      'а Telegram-прив’язки та історія залишаться.')){
-      send(op,{title});
+    const title=prompt(
+      'Назва нової гри та першого раунду:',
+      'Нова гра · Раунд 1'
+    );
+
+    if(title&&confirm(
+      'Створити нову гру? Поточний склад очиститься, '+
+      'а Telegram-прив’язки та історія залишаться.'
+    )){
+      await send(op,{title});
     }
     return;
   }
 
   if(op==='roster'){
     const p=data.players.find(x=>x.id===id);
-    if(p)send(op,{player:id,add:!p.in_game});
+    if(p){
+      await send(op,{
+        player:id,
+        add:!p.in_game
+      });
+    }
     return;
   }
 
   if(op==='move'){
-    send(op,{player:id,direction:Number(b.dataset.direction)});
+    await send(op,{
+      player:id,
+      direction:Number(b.dataset.direction)
+    });
     return;
   }
 
   if(op==='new_round'){
-    const title=prompt('Назва нового раунду:','Раунд '+(data.rounds.length+1));
-    if(title)send(op,{title});
+    const title=prompt(
+      'Назва нового раунду:',
+      'Раунд '+(data.rounds.length+1)
+    );
+    if(title)await send(op,{title});
     return;
   }
 
   if(op==='rename'){
     const p=data.players.find(x=>x.id===id);
-    const title=prompt('Нове ім’я (номер задається порядком у списку):',p.name);
-    if(title)send(op,{player:id,name:title});
+    const title=prompt(
+      'Нове ім’я (номер задається порядком у списку):',
+      p.name
+    );
+    if(title)await send(op,{player:id,name:title});
     return;
   }
 
-  if(op==='remove'&&!confirm('Видалити профіль і відв’язати Telegram? '+
-    'Для наступної гри доведеться додати гравчиню знову та видати новий код. '+
-    'Старі голоси залишаться в історії.'))return;
+  if(op==='remove'&&!confirm(
+    'Видалити профіль і відв’язати Telegram? '+
+    'Для наступної гри доведеться додати гравчиню знову '+
+    'та видати новий код. Старі голоси залишаться в історії.'
+  ))return;
 
-  if(op==='unbind'&&!confirm('Відв’язати Telegram? Попередній код перестане діяти.'))return;
+  if(op==='unbind'&&!confirm(
+    'Відв’язати Telegram? Попередній код перестане діяти.'
+  ))return;
 
-  send(op,{player:id});
+  await send(op,{player:id});
+});
+
+async function refreshHost(){
+  if(
+    !data?.admin||
+    tab!=='vote'||
+    busy||
+    refreshBusy||
+    document.hidden
+  )return;
+
+  refreshBusy=true;
+  const started=revision;
+
+  try{
+    const out=await call('state');
+
+    if(
+      started!==revision||
+      busy||
+      tab!=='vote'
+    )return;
+
+    data=out;
+    render();
+  }catch{
+    const note=document.getElementById('refresh-status');
+    if(note){
+      note.textContent=
+        'Не вдалося оновити галочки. Повторюємо автоматично…';
+    }
+  }finally{
+    refreshBusy=false;
+  }
+}
+
+setInterval(refreshHost,7000);
+
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden)refreshHost();
 });
 
 send('state');
